@@ -1,0 +1,135 @@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+  var apps;
+  
+  // for refresh data every 10 secondes
+  var interval = setInterval(function() {
+    google.script.run.withSuccessHandler(displayResult).withFailureHandler(onFailure).serverSideData();
+  }, 10000)
+  
+  $(function () {
+  //Calling server side data
+  google.script.run
+    .withSuccessHandler(displayResult)
+    .withFailureHandler(onFailure)
+    .serverSideData();
+    
+  apps = new Vue({
+    el: "#frmApps",
+    data() {
+      return {
+        onLoad: true,
+        categoriesList: null,
+      };
+    },
+    computed: {},
+    methods: {
+      stopCall() {
+        clearInterval(interval);
+      },
+      restartCall() {
+        interval = setInterval(function () {
+          google.script.run
+            .withSuccessHandler(displayResult)
+            .withFailureHandler(onFailure)
+            .serverSideData();
+        }, 10000);
+      },
+      //Is called when the dropdown is changed
+      /**
+      changeChart() {
+        const context = this;
+        Vue.nextTick(function () {
+          context.createCharts();
+        });
+      },
+      */
+      
+      refresh(e) {
+        switch (e.flag) {
+          case "updateCollab":
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Votre profil à été mis-à-jour",
+              footer:
+                "Cette action peut prendre quelques minutes avant de se mettre à jour",
+              showConfirmButton: false,
+              timer: 3000
+            });
+            break;
+          case "createSkill":
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "La compétence à bien été créé.",
+              footer:
+                "Cette action peut prendre quelques minutes avant de se mettre à jour",
+              showConfirmButton: false,
+              timer: 3000
+            });
+            break;
+          case "createCertif":
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "La certification à bien été créé.",
+              footer:
+                "Cette action peut prendre quelques minutes avant de se mettre à jour",
+              showConfirmButton: false,
+              timer: 3000
+            });
+            break;
+          case "createCollab":
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Le collaborateur à bien été créé",
+              footer:
+                "Cette action peut prendre quelques minutes avant de se mettre à jour",
+              showConfirmButton: false,
+              timer: 3000
+            });
+            break;
+          case "deleteCollab":
+            Swal.fire(
+              "Supprimé!",
+              "le collaborateur selectionné à été supprimé.",
+              "success"
+            );
+            break;
+          case "deleteSkill":
+            Swal.fire(
+              "Supprimée!",
+              "La compétence selectionnée à été supprimée.",
+              "success"
+            );
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  });
+});
+
+
+  function onFailure () {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Something went wrong!'
+    });
+  }
+
+  //function to get data from server side 
+  function displayResult(serverResponse) {
+  	try {
+      apps.categoriesList = serverResponse[0]; // exemple
+      apps.onLoad = false;
+  	} catch (e) {
+  		console.log(e);
+  	}
+  }
+</script>
