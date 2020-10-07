@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <?!= HtmlService.createHtmlOutputFromFile('Stylesheet').getContent(); ?> <!-- Link to css on html file -->
+</head>
+
+<body>
+  <div>
+    <div id="frmApps">
+      <div v-if="onLoad" id="spinner" class="container-fluid"> <!-- include a spinner during the data loading -->
+      </div>
+    </div>
+  </div>
+    <?!= HtmlService.createHtmlOutputFromFile('JavaScript').getContent(); ?> <!-- Link to VueJs on html file -->
+</body>
+
+</html>
